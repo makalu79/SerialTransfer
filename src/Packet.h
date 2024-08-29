@@ -33,7 +33,7 @@ const uint8_t STOP_BYTE  = 0x81;
 const uint8_t PREAMBLE_SIZE   = 4;
 const uint8_t POSTAMBLE_SIZE  = 2;
 #ifdef SERIALTRANSFER_MAX_PACKET_SIZE
-const uint8_t MAX_PACKET_SIZE = SERIALTRANSFER_MAX_PACKED_SIZE;
+const uint8_t MAX_PACKET_SIZE = SERIALTRANSFER_MAX_PACKET_SIZE;
 #else
 const uint8_t MAX_PACKET_SIZE = 0xFE; // Maximum allowed payload bytes per packet
 #endif
