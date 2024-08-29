@@ -122,8 +122,10 @@ uint8_t Packet::parse(const uint8_t& recChar, const bool& valid)
 
 	if(!packet_fresh) //packet is stale, start over.
 	{
+		#ifdef SERIALTRANSFER_DEBUG_SERIAL
 		if (debug)
-			debugPort->println("ERROR: STALE PACKET");
+			debugPort->println(F("ERROR: STALE PACKET"));
+		#endif
 
 		bytesRead   = 0;
 		state       = find_start_byte;
@@ -176,8 +178,10 @@ uint8_t Packet::parse(const uint8_t& recChar, const bool& valid)
 				state     = find_start_byte;
 				status    = PAYLOAD_ERROR;
 
+				#ifdef SERIALTRANSFER_DEBUG_SERIAL
 				if (debug)
-					debugPort->println("ERROR: PAYLOAD_ERROR");
+					debugPort->println(F("ERROR: PAYLOAD_ERROR"));
+				#endif
 
 				reset();
 				return bytesRead;
@@ -210,8 +214,10 @@ uint8_t Packet::parse(const uint8_t& recChar, const bool& valid)
 				state     = find_start_byte;
 				status    = CRC_ERROR;
 
+				#ifdef SERIALTRANSFER_DEBUG_SERIAL
 				if (debug)
-					debugPort->println("ERROR: CRC_ERROR");
+					debugPort->println(F("ERROR: CRC_ERROR"));
+				#endif
 
 				reset();
 				return bytesRead;
@@ -234,11 +240,13 @@ uint8_t Packet::parse(const uint8_t& recChar, const bool& valid)
 				{
 					if (idByte < callbacksLen)
 						callbacks[idByte]();
+					#ifdef SERIALTRANSFER_DEBUG_SERIAL
 					else if (debug)
 					{
 						debugPort->print(F("ERROR: No callback available for packet ID "));
 						debugPort->println(idByte);
 					}
+					#endif
 				}
 				packetStart = 0;	// reset the timer
 				return bytesToRec;
@@ -247,8 +255,10 @@ uint8_t Packet::parse(const uint8_t& recChar, const bool& valid)
 			bytesRead = 0;
 			status    = STOP_BYTE_ERROR;
 
+			#ifdef SERIALTRANSFER_DEBUG_SERIAL
 			if (debug)
-				debugPort->println("ERROR: STOP_BYTE_ERROR");
+				debugPort->println(F("ERROR: STOP_BYTE_ERROR"));
+			#endif
 
 			reset();
 			return bytesRead;
@@ -257,11 +267,13 @@ uint8_t Packet::parse(const uint8_t& recChar, const bool& valid)
 
 		default:
 		{
+			#ifdef SERIALTRANSFER_DEBUG_SERIAL
 			if (debug)
 			{
-				debugPort->print("ERROR: Undefined state ");
+				debugPort->print(F("ERROR: Undefined state "));
 				debugPort->println(state);
 			}
+			#endif
 
 			reset();
 			bytesRead = 0;
